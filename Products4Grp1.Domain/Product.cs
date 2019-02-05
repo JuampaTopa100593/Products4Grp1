@@ -28,6 +28,8 @@ namespace Products4Grp1.Domain
         [DataType(DataType.Date)]
         public DateTime LastPurchas { get; set; }
 
+        public string Image { get; set; }
+
         public double Stock { get; set; }
 
         [DataType(DataType.MultilineText)]

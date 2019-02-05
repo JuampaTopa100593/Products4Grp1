@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Linq;
+﻿using System.Data.Entity;
 using System.Threading.Tasks;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using Products4Grp1.Backend.Models;
 using Products4Grp1.Domain;
+using Products4Grp1.Backend.Helpers;
+using System;
 
 namespace Products4Grp1.Backend.Controllers
 {
+    [Authorize(Users = "juan.topa6@utc.edu.ec")]
     public class ProductsController : Controller
     {
         private DataContextLocal db = new DataContextLocal();
@@ -30,7 +28,7 @@ namespace Products4Grp1.Backend.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Product product = await db.Products.FindAsync(id);
+            var product = await db.Products.FindAsync(id);
             if (product == null)
             {
                 return HttpNotFound();
@@ -46,21 +44,48 @@ namespace Products4Grp1.Backend.Controllers
         }
 
         // POST: Products/Create
-        // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que desea enlazarse. Para obtener 
-        // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "ProductsId,CategoryId,Description,Price,IsActive,LastPurchas,Stock,Remarks")] Product product)
+        public async Task<ActionResult> Create(ProductView view)
         {
             if (ModelState.IsValid)
             {
+                var pic = string.Empty;
+                var folder = "~/Content/Images";
+
+                if (view.ImageFile != null)
+                {
+                    pic = FilesHelper.UploadPhoto(view.ImageFile, folder);
+                    pic = string.Format("{0}/{1}", folder, pic);
+                }
+
+                var product = ToProduct(view);
+                product.Image = pic;
                 db.Products.Add(product);
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.CategoryId = new SelectList(db.Categories, "CategoryId", "Description", product.CategoryId);
-            return View(product);
+            ViewBag.CategoryId = new SelectList(db.Categories, "CategoryId", "Description", view.CategoryId);
+            return View(view);
+        }
+
+        private Product ToProduct(ProductView view)
+        {
+            return new Product
+            {
+                Category = view.Category,
+                CategoryId = view.CategoryId,
+                Description = view.Description,
+                Image = view.Image,
+                IsActive = view.IsActive,
+                LastPurchas = view.LastPurchas,
+                Price = view.Price,
+                ProductsId = view.ProductsId,
+                Remarks = view.Remarks,
+                Stock = view.Stock,
+            };
         }
 
         // GET: Products/Edit/5
@@ -76,24 +101,51 @@ namespace Products4Grp1.Backend.Controllers
                 return HttpNotFound();
             }
             ViewBag.CategoryId = new SelectList(db.Categories, "CategoryId", "Description", product.CategoryId);
-            return View(product);
+            var view = ToView(product);
+            return View(view);
+        }
+
+        private ProductView ToView(Product product)
+        {
+            return new ProductView
+            {
+                Category = product.Category,
+                CategoryId = product.CategoryId,
+                Description = product.Description,
+                Image = product.Image,
+                IsActive = product.IsActive,
+                LastPurchas = product.LastPurchas,
+                Price = product.Price,
+                ProductsId = product.ProductsId,
+                Remarks = product.Remarks,
+                Stock = product.Stock,
+            };
         }
 
         // POST: Products/Edit/5
-        // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que desea enlazarse. Para obtener 
-        // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "ProductsId,CategoryId,Description,Price,IsActive,LastPurchas,Stock,Remarks")] Product product)
+        public async Task<ActionResult> Edit(ProductView view)
         {
             if (ModelState.IsValid)
             {
+                var pic = view.Image;
+                var folder = "~/Content/Images";
+
+                if (view.ImageFile != null)
+                {
+                    pic = FilesHelper.UploadPhoto(view.ImageFile, folder);
+                    pic = string.Format("{0}/{1}", folder, pic);
+                }
+
+                var product = ToProduct(view);
+                product.Image = pic;
                 db.Entry(product).State = EntityState.Modified;
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewBag.CategoryId = new SelectList(db.Categories, "CategoryId", "Description", product.CategoryId);
-            return View(product);
+            ViewBag.CategoryId = new SelectList(db.Categories, "CategoryId", "Description", view.CategoryId);
+            return View(view);
         }
 
         // GET: Products/Delete/5

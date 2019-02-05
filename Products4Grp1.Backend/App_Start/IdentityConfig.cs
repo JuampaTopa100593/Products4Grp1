@@ -50,14 +50,14 @@ namespace Products4Grp1.Backend
                 RequireUniqueEmail = true
             };
 
-            // Configure la lógica de validación de contraseñas
+            // Configure la lógica de validación de contraseñas cambiar codigos a true
             manager.PasswordValidator = new PasswordValidator
             {
                 RequiredLength = 6,
-                RequireNonLetterOrDigit = true,
-                RequireDigit = true,
-                RequireLowercase = true,
-                RequireUppercase = true,
+                RequireNonLetterOrDigit = false,
+                RequireDigit = false,
+                RequireLowercase = false,
+                RequireUppercase = false,
             };
 
             // Configurar valores predeterminados para bloqueo de usuario
