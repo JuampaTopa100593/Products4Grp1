@@ -247,10 +247,17 @@ namespace Products4Grp1.ViewModel
                 return;
             }
 
+            var mainViewModel = MainViewModel.GetInstance();
+            mainViewModel.Token = response;
+            //mainViewModel.RegisterDevice();
+            mainViewModel.Categories = new CategoriesViewModel();
+            //navigationService.SetMainPage("MasterView");
+            await Application.Current.MainPage.Navigation.PushAsync(
+                new CategoriesView());
 
             Email = null;
             Password = null;
-            await Application.Current.MainPage.Navigation.PushAsync(new CategoriesView());
+           
 
 
             //await dialogService.ShowMessage("Taran !!", "Welcome!!!");
@@ -270,11 +277,7 @@ namespace Products4Grp1.ViewModel
             //    response.Password = Password;
             //    dataService.DeleteAllAndInsert(response);
 
-            //    var mainViewModel = MainViewModel.GetInstance();
-            //    mainViewModel.Token = response;
-            //    mainViewModel.RegisterDevice();
-            //    mainViewModel.Categories = new CategoriesViewModel();
-            //    navigationService.SetMainPage("MasterView");
+            
 
             //    Email = null;
             //    Password = null;

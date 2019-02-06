@@ -1,4 +1,6 @@
-﻿namespace Products4Grp1.ViewModel
+﻿using Products4Grp1.Models;
+
+namespace Products4Grp1.ViewModel
 {
     public class MainViewModel
     {
@@ -14,12 +16,32 @@
             get;
             set;
         }
+        public TokenResponse Token
+        {
+            get;
+            set;
+        }
         #endregion
 
         #region Costructors
         public MainViewModel()
         {
+            instance = this;
             Login = new LoginViewModel();
+        }
+        #endregion
+
+        #region Singelton
+        static MainViewModel instance;
+
+        public static MainViewModel GetInstance()
+        {
+            if (instance == null)
+            {
+                return new MainViewModel();
+            }
+
+            return instance;
         }
         #endregion
     }
