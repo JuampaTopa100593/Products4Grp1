@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Xamarin.Forms;
 
-namespace Products4Grp1
+using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
+
+namespace Products4Grp1.Views
 {
-    public partial class MainPage : ContentPage
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class CategoriesView : ContentPage
     {
-        public MainPage()
+        public CategoriesView()
         {
             InitializeComponent();
         }
