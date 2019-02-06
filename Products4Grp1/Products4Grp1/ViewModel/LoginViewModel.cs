@@ -129,7 +129,8 @@ namespace Products4Grp1.ViewModel
             //dataService = new DataService();
             dialogService = new DialogService();
             //navigationService = new NavigationService();
-
+            Email = "juan.topa6@utc.edu.ec";
+            Password = "123456";
             IsEnabled = true;
             IsToggled = true;
         }

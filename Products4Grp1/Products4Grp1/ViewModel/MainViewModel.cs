@@ -21,6 +21,11 @@ namespace Products4Grp1.ViewModel
             get;
             set;
         }
+        public ProductsViewModel Products
+        {
+            get;
+            set;
+        }
         #endregion
 
         #region Costructors
