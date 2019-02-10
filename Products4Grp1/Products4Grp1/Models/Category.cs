@@ -1,16 +1,26 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using Products4Grp1.ViewModel;
-using Products4Grp1.Views;
-using System;
+using Products4Grp1.Services;
 using System.Collections.Generic;
-using System.Text;
 using System.Windows.Input;
-using Xamarin.Forms;
 
 namespace Products4Grp1.Models
 {
     public class Category
     {
+        #region Services
+        //DialogService dialogService;
+        NavigationService navigationService;
+        #endregion
+
+        #region Constructors
+        public Category()
+        {
+            //dialogService = new DialogService();
+            navigationService = new NavigationService();
+        }
+        #endregion
+
         #region Properties
         public int CategoryId { get; set; }
         public string Description { get; set; }
@@ -30,8 +40,8 @@ namespace Products4Grp1.Models
         {
             var mainViewModel = MainViewModel.GetInstance();
             mainViewModel.Products = new ProductsViewModel(Products);
-            await Application.Current.MainPage.Navigation.PushAsync(
-                new ProductsView());
+            await navigationService.Navigate("ProductsView");
+            
         }
         #endregion
     }

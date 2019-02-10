@@ -22,7 +22,7 @@ namespace Products4Grp1.ViewModel
         #endregion
 
         #region Attributes
-        //List<Category> categories;
+        List<Category> categories;
         ObservableCollection<Category> _categories;
         //bool _isRefreshing;
         //string _filter;
@@ -48,10 +48,11 @@ namespace Products4Grp1.ViewModel
         }
         #endregion
 
+
         #region Constructors
         public CategoriesViewModel()
         {
-            //instance = this;
+            instance = this;
 
             apiService = new ApiService();
             //dataService = new DataService();
@@ -61,7 +62,29 @@ namespace Products4Grp1.ViewModel
         }
         #endregion
 
+
+        #region Singelton
+        static CategoriesViewModel instance;
+
+        public static CategoriesViewModel GetInstance()
+        {
+            if (instance == null)
+            {
+                return new CategoriesViewModel();
+            }
+
+            return instance;
+        }
+        #endregion
+
         #region Methods
+        public void AddCategory(Category category)
+        {
+            categories.Add(category);
+            CategoriesList = new ObservableCollection<Category>(
+                    categories.OrderBy(c => c.Description));
+        }
+
         async void LoadCategories()
         {
             //IsRefreshing = true;
@@ -75,7 +98,6 @@ namespace Products4Grp1.ViewModel
             }
 
             var mainViewModel = MainViewModel.GetInstance();
-
             var response = await apiService.GetList<Category>("https://products4grp1api100593.azurewebsites.net",
                 "/api", "/Categories", mainViewModel.Token.TokenType, mainViewModel.Token.AccessToken);
             if(!response.IsSuccess)
@@ -86,9 +108,9 @@ namespace Products4Grp1.ViewModel
                 return;
             }
             
-            var categories = (List<Category>)response.Result;
-            CategoriesList = new ObservableCollection<Category>(
-                categories.OrderBy(c => c.Description));
+                categories = (List<Category>)response.Result;
+                CategoriesList = new ObservableCollection<Category>(
+                    categories.OrderBy(c => c.Description));
         }
         #endregion
     }

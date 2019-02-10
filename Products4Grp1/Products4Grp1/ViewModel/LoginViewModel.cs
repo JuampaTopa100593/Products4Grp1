@@ -1,11 +1,8 @@
 ﻿using GalaSoft.MvvmLight.Command;
-using System;
 using System.ComponentModel;
 using System.Windows.Input;
 using Products4Grp1.Services;
 using Products1.Services;
-using Xamarin.Forms;
-using Products4Grp1.Views;
 
 namespace Products4Grp1.ViewModel
 {
@@ -19,7 +16,7 @@ namespace Products4Grp1.ViewModel
         ApiService apiService;
         //DataService dataService;
         DialogService dialogService;
-        //NavigationService navigationService;
+        NavigationService navigationService;
         #endregion
 
         #region Attributes
@@ -128,7 +125,7 @@ namespace Products4Grp1.ViewModel
             apiService = new ApiService();
             //dataService = new DataService();
             dialogService = new DialogService();
-            //navigationService = new NavigationService();
+            navigationService = new NavigationService();
             Email = "juan.topa6@utc.edu.ec";
             Password = "123456";
             IsEnabled = true;
@@ -253,8 +250,7 @@ namespace Products4Grp1.ViewModel
             //mainViewModel.RegisterDevice();
             mainViewModel.Categories = new CategoriesViewModel();
             //navigationService.SetMainPage("MasterView");
-            await Application.Current.MainPage.Navigation.PushAsync(
-                new CategoriesView());
+            await navigationService.Navigate("CategoriesView");
 
             Email = null;
             Password = null;

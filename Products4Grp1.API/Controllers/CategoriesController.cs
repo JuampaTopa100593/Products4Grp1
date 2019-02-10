@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
@@ -110,7 +111,23 @@ namespace Products4Grp1.API.Controllers
             }
 
             db.Categories.Add(category);
-            await db.SaveChangesAsync();
+            try
+            {
+                await db.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                if (ex.InnerException != null &&
+                   ex.InnerException.InnerException != null &&
+                   ex.InnerException.InnerException.Message.Contains("Index"))
+                {
+                    return BadRequest("Registro existente");
+                }
+                else
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
 
             return CreatedAtRoute("DefaultApi", new { id = category.CategoryId }, category);
         }

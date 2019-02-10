@@ -4,6 +4,11 @@
              x:Class="Products4Grp1.Views.ProductsView"
              BindingContext="{Binding Main, Source={StaticResource Locator}}"
     Title="Products">
+    
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Icon="ic_add_shopping_cart"/>
+    </ContentPage.ToolbarItems>
+   
     <ContentPage.Content>
         <StackLayout>
             <StackLayout 

@@ -5,10 +5,11 @@
                  BindingContext="{Binding Main, Source={StaticResource Locator}}"
                  Title="Categories"
                  >
+    
         <ContentPage.ToolbarItems>
             <ToolbarItem 
                 Command="{Binding NewCategoryCommand}"
-                Icon="ic_action_add_circle"/>
+                Icon="ic_shopping_cart"/>
         </ContentPage.ToolbarItems>
 
         <ContentPage.Content>

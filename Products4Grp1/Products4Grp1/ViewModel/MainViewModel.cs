@@ -1,9 +1,17 @@
-﻿using Products4Grp1.Models;
+﻿using GalaSoft.MvvmLight.Command;
+using Products4Grp1.Models;
+using System;
+using System.Windows.Input;
+using Products4Grp1.Services;
 
 namespace Products4Grp1.ViewModel
 {
     public class MainViewModel
     {
+        #region Services
+        NavigationService navigationService;
+        #endregion
+
         #region properties
         public LoginViewModel Login
         {
@@ -26,13 +34,31 @@ namespace Products4Grp1.ViewModel
             get;
             set;
         }
+        public NewCaterogyViewModel NewCaterogy { get; set; }
         #endregion
 
         #region Costructors
         public MainViewModel()
         {
             instance = this;
+            navigationService = new NavigationService();
             Login = new LoginViewModel();
+        }
+        #endregion
+
+        #region Commands
+        public ICommand NewCategoryCommand
+        {
+            get
+            {
+                return new RelayCommand(GoNewCategory);
+            }
+        }
+
+        async void GoNewCategory()
+        {
+            NewCaterogy = new NewCaterogyViewModel();
+            await navigationService.Navigate("NewCategoryView");
         }
         #endregion
 
