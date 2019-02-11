@@ -28,6 +28,11 @@ namespace Products4Grp1.Services
                     new NewCategoryView());
                     break;
 
+                case "EditCategoryView":
+                    await Application.Current.MainPage.Navigation.PushAsync(
+                    new EditCategoryView());
+                    break;
+
                 default:
             break;
             }

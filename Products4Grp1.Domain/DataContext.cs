@@ -1,4 +1,5 @@
 ﻿using System.Data.Entity;
+using System.Data.Entity.ModelConfiguration.Conventions;
 
 namespace Products4Grp1.Domain
 {
@@ -8,6 +9,12 @@ namespace Products4Grp1.Domain
         {
 
         }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
+        }
+
         public DbSet<Category> Categories { get; set; }
 
         public DbSet<Product> Products { get; set; }

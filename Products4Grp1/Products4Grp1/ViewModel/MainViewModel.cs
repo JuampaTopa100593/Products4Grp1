@@ -34,7 +34,16 @@ namespace Products4Grp1.ViewModel
             get;
             set;
         }
-        public NewCaterogyViewModel NewCaterogy { get; set; }
+        public NewCaterogyViewModel NewCaterogy {
+            get;
+            set;
+        }
+
+        public EditCategoryViewModel EditCategory
+        {
+            get;
+            set;
+        }
         #endregion
 
         #region Costructors

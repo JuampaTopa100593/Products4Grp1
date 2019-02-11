@@ -3,21 +3,29 @@ using Products4Grp1.ViewModel;
 using Products4Grp1.Services;
 using System.Collections.Generic;
 using System.Windows.Input;
+using System;
 
 namespace Products4Grp1.Models
 {
     public class Category
     {
         #region Services
-        //DialogService dialogService;
+        DialogService dialogService;
         NavigationService navigationService;
         #endregion
 
         #region Constructors
         public Category()
         {
-            //dialogService = new DialogService();
+            dialogService = new DialogService();
             navigationService = new NavigationService();
+        }
+        #endregion
+
+        #region Methods
+        public override int GetHashCode()
+        {
+            return CategoryId;
         }
         #endregion
 
@@ -28,6 +36,42 @@ namespace Products4Grp1.Models
         #endregion
 
         #region Commands
+        public ICommand DeleteCommand
+        {
+            get
+            {
+                return new RelayCommand(Delete);
+            }
+        }
+
+        async void Delete()
+        {
+            var response = await dialogService.ShowConfirm(
+                "Alerta",
+                "¿Estás seguro de eliminar este registro?");
+            if (!response)
+            {
+                return;
+            }
+
+            await CategoriesViewModel.GetInstance().DeleteCategory(this);
+        }
+
+        public ICommand EditCommand
+        {
+            get
+            {
+                return new RelayCommand(Edit);
+            }
+        }
+
+        async void Edit()
+        {
+            MainViewModel.GetInstance().EditCategory = 
+                new EditCategoryViewModel(this);
+            await navigationService.Navigate("EditCategoryView");
+        }
+
         public ICommand SelectCategoryCommand
         {
             get

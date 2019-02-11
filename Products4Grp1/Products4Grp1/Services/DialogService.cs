@@ -13,5 +13,14 @@ namespace Products4Grp1.Services
                 "Acceptar");
         }
 
+        public async Task<bool> ShowConfirm(string title, string message)
+        {
+            return await Application.Current.MainPage.DisplayAlert(
+                title,
+                message,
+                "SI",
+                "NO");
+        }
+
     }
 }

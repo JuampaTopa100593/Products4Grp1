@@ -86,15 +86,17 @@ namespace Products4Grp1.API.Controllers
             {
                 await db.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
-                if (!CategoryExists(id))
+                if (ex.InnerException != null &&
+                    ex.InnerException.InnerException != null &&
+                    ex.InnerException.InnerException.Message.Contains("Index"))
                 {
-                    return NotFound();
+                    return BadRequest("Existe un registro con la misma descripción.");
                 }
                 else
                 {
-                    throw;
+                    return BadRequest(ex.Message);
                 }
             }
 
@@ -118,10 +120,10 @@ namespace Products4Grp1.API.Controllers
             catch (Exception ex)
             {
                 if (ex.InnerException != null &&
-                   ex.InnerException.InnerException != null &&
-                   ex.InnerException.InnerException.Message.Contains("Index"))
+                    ex.InnerException.InnerException != null &&
+                    ex.InnerException.InnerException.Message.Contains("Index"))
                 {
-                    return BadRequest("Registro existente");
+                    return BadRequest("Existe un registro con la misma descripción.");
                 }
                 else
                 {
@@ -143,7 +145,23 @@ namespace Products4Grp1.API.Controllers
             }
 
             db.Categories.Remove(category);
-            await db.SaveChangesAsync();
+            try
+            {
+                await db.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                if (ex.InnerException != null &&
+                    ex.InnerException.InnerException != null &&
+                    ex.InnerException.InnerException.Message.Contains("REFERENCE"))
+                {
+                    return BadRequest("Usted no puede eliminar, ya que existen elementos relacionados");
+                }
+                else
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
 
             return Ok(category);
         }

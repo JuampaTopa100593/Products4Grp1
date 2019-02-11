@@ -9,8 +9,9 @@ using System.Windows.Input;
 
 namespace Products4Grp1.ViewModel
 {
-    public class NewCaterogyViewModel : INotifyPropertyChanged
+    public class EditCategoryViewModel : INotifyPropertyChanged
     {
+    
         #region Events
         public event PropertyChangedEventHandler PropertyChanged;
         #endregion
@@ -23,9 +24,9 @@ namespace Products4Grp1.ViewModel
         #endregion
 
         #region Attributes
-        
         bool _isRunning;
         bool _isEnabled;
+        Category category;
         #endregion
 
         #region Properties
@@ -74,13 +75,17 @@ namespace Products4Grp1.ViewModel
         #endregion
 
         #region Constructors
-        public NewCaterogyViewModel()
+        public EditCategoryViewModel(Category category)
         {
+            this.category = category;
+
             apiService = new ApiService();
             //dataService = new DataService();
             dialogService = new DialogService();
             navigationService = new NavigationService();
-            
+
+            Description = category.Description;
+
             IsEnabled = true;
         }
         #endregion
@@ -116,19 +121,15 @@ namespace Products4Grp1.ViewModel
                 return;
             }
 
-            var category = new Category
-            {
-                Description = Description,
-            };
-
+            category.Description = Description;
             var mainViewModel = MainViewModel.GetInstance();
 
-            var response = await apiService.Post(
-                "https://products4grp1api100593.azurewebsites.net", 
-                "/api", 
+            var response = await apiService.Put(
+                "https://products4grp1api100593.azurewebsites.net",
+                "/api",
                 "/Categories",
                 mainViewModel.Token.TokenType,
-                mainViewModel.Token.AccessToken, 
+                mainViewModel.Token.AccessToken,
                 category);
 
             if (!response.IsSuccess)
@@ -141,15 +142,13 @@ namespace Products4Grp1.ViewModel
                 return;
             }
 
-            category = (Category)response.Result;
             var categoriesViewModel = CategoriesViewModel.GetInstance();
-            categoriesViewModel.AddCategory(category);
+            categoriesViewModel.UpdateCategory(category);
 
             await navigationService.Back();
 
             IsRunning = false;
             IsEnabled = true;
-            
         }
         #endregion
     }

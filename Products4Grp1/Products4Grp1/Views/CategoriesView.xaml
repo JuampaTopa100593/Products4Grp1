@@ -9,7 +9,7 @@
         <ContentPage.ToolbarItems>
             <ToolbarItem 
                 Command="{Binding NewCategoryCommand}"
-                Icon="ic_shopping_cart"/>
+                Icon="ic_action_playlist_add"/>
         </ContentPage.ToolbarItems>
 
         <ContentPage.Content>
@@ -19,21 +19,24 @@
 
                 <ListView 
                     HasUnevenRows="True"
+                    IsRefreshing="{Binding IsRefreshing, Mode=TwoWay}"
+                    IsPullToRefreshEnabled="True"
+                    RefreshCommand="{Binding RefreshCommand}"
                     ItemsSource="{Binding CategoriesList}">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
-                                <!--<ViewCell.ContextActions>
+                                <ViewCell.ContextActions>
                                     <MenuItem 
                                         Command="{Binding EditCommand}" 
-                                        Text="Edit">
+                                        Text="Editar">
                                     </MenuItem>
                                     <MenuItem 
                                         Command="{Binding DeleteCommand}" 
                                         IsDestructive="true"     
-                                        Text="Delete">
+                                        Text="Eliminar">
                                     </MenuItem>
-                                </ViewCell.ContextActions>-->
+                                </ViewCell.ContextActions>
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"/>

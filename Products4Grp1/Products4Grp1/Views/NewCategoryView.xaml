@@ -9,11 +9,11 @@
                 BindingContext="{Binding NewCaterogy}"
                 Padding="10">
             <Label
-                Text="Category">
+                Text="CATEGORIA">
             </Label>
             <Entry
                 Text="{Binding Description, Mode=TwoWay}"
-                Placeholder="Enter category description...">
+                Placeholder="Ingresa nueva Categoria">
             </Entry>
             <ActivityIndicator
                 IsRunning="{Binding IsRunning, Mode=TwoWay}"
